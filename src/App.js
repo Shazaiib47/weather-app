@@ -17,6 +17,11 @@ function App() {
     }
   }
 
+  const resetData = () => {
+    setData({})
+    setLocation('')
+  }
+
   return (
     <div className="app">
       <div className="search">
@@ -26,6 +31,7 @@ function App() {
           onKeyPress={searchLocation}
           placeholder='Enter Location'
           type="text" />
+           <button className="reset-button" onClick={resetData}>Reset</button>
       </div>
       <div className="container">
         <div className="top">

@@ -71,6 +71,36 @@ h1 {
   background: rgba(255,255,255, 0.2);
 }
 
+.cards {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 25px;
+  padding: 1rem;
+  text-align: center;
+  color: #f8f8f8;
+  width: 200px;
+}
+
+.card .location {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.card .temp {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.card .description {
+  font-size: 1rem;
+}
+
 ::placeholder {
   color: #f8f8f8;
 }

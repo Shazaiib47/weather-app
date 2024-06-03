@@ -3,6 +3,7 @@ import axios from 'axios';
 
 function App() {
   const [data, setData] = useState({});
+  const [userLocationData, setUserLocationData] = useState({});
   const [location, setLocation] = useState('');
   const [recommendedData, setRecommendedData] = useState([]);
 
@@ -14,7 +15,6 @@ function App() {
     return response.data;
   };
 
-
   const recommendedLocations = useMemo(() => ['Dubai', 'New York', 'London'], []);
 
   useEffect(() => {
@@ -22,16 +22,27 @@ function App() {
       const data = await Promise.all(recommendedLocations.map(location => fetchWeather(location)));
       setRecommendedData(data);
     };
-  
+
     fetchRecommendedData();
   }, [recommendedLocations]);
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const { latitude, longitude } = position.coords;
+        const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=imperial&appid=${apiKey}`;
+        axios.get(url).then((response) => {
+          setUserLocationData(response.data);
+        });
+      });
+    }
+  }, []);
 
   const searchLocation = (event) => {
     if (event.key === 'Enter') {
       const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=imperial&appid=${apiKey}`;
       axios.get(url).then((response) => {
         setData(response.data);
-        console.log(response.data);
       });
       setLocation('');
     }
@@ -54,20 +65,30 @@ function App() {
         <button className="reset-button" onClick={resetData}>Reset</button>
       </div>
       <div className="container">
-        {Object.keys(data).length === 0 && (
-          <div className="cards">
-            {recommendedData.map((locationData, index) => (
-              <div className="card" key={index}>
-                <div className="location">{locationData.name}</div>
-                <div className="temp">{locationData.main.temp.toFixed()}°F</div>
-                <div className="description">{locationData.weather[0].main}</div>
-                <div className="details">
-                  <div className="detail">Feels Like: {locationData.main.feels_like.toFixed()}°F</div>
-                  <div className="detail">Humidity: {locationData.main.humidity}%</div>
-                  <div className="detail">Wind Speed: {locationData.wind.speed.toFixed()} MPH</div>
-                </div>
+        <div className="cards">
+          {recommendedData.map((locationData, index) => (
+            <div className="card" key={index}>
+              <div className="location">{locationData.name}</div>
+              <div className="temp">{locationData.main.temp.toFixed()}°F</div>
+              <div className="description">{locationData.weather[0].main}</div>
+              <div className="details">
+                <div className="detail">Feels Like: {locationData.main.feels_like.toFixed()}°F</div>
+                <div className="detail">Humidity: {locationData.main.humidity}%</div>
+                <div className="detail">Wind Speed: {locationData.wind.speed.toFixed()} MPH</div>
               </div>
-            ))}
+            </div>
+          ))}
+        </div>
+        {Object.keys(userLocationData).length !== 0 && (
+          <div className="card">
+            <div className="location">{userLocationData.name}</div>
+            <div className="temp">{userLocationData.main.temp.toFixed()}°F</div>
+            <div className="description">{userLocationData.weather[0].main}</div>
+            <div className="details">
+              <div className="detail">Feels Like: {userLocationData.main.feels_like.toFixed()}°F</div>
+              <div className="detail">Humidity: {userLocationData.main.humidity}%</div>
+              <div className="detail">Wind Speed: {userLocationData.wind.speed.toFixed()} MPH</div>
+            </div>
           </div>
         )}
         {Object.keys(data).length !== 0 && (

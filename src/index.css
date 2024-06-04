@@ -115,7 +115,7 @@ h1 {
 .user-location-card {
   margin-top: 2rem;
   text-align: center;
-  width: 200px; /* Ensure it matches the other cards */
+  width: 200px; 
   background: rgba(255, 255, 255, 0.1);
   border-radius: 25px;
   padding: 1rem;

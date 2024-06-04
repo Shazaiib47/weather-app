@@ -55,7 +55,6 @@ h1 {
   color: #f8f8f8;
 }
 
-
 .app .reset-button {
   padding: .7rem 1.5rem;
   font-size: 1.2rem;
@@ -76,6 +75,7 @@ h1 {
   justify-content: center;
   gap: 1rem;
   padding: 1rem;
+  flex-wrap: wrap;
 }
 
 .card {
@@ -99,6 +99,27 @@ h1 {
 
 .card .description {
   font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.card .details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.card .detail {
+  font-size: 0.9rem;
+}
+
+.user-location-card {
+  margin-top: 2rem;
+  text-align: center;
+  width: 200px; /* Ensure it matches the other cards */
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 25px;
+  padding: 1rem;
+  color: #f8f8f8;
 }
 
 ::placeholder {

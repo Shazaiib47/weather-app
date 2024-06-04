@@ -6,6 +6,7 @@ function App() {
   const [userLocationData, setUserLocationData] = useState({});
   const [location, setLocation] = useState('');
   const [recommendedData, setRecommendedData] = useState([]);
+  const [searchPerformed, setSearchPerformed] = useState(false);
 
   const apiKey = '895284fb2d2c50a520ea537456963d9c';
 
@@ -43,6 +44,7 @@ function App() {
       const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=imperial&appid=${apiKey}`;
       axios.get(url).then((response) => {
         setData(response.data);
+        setSearchPerformed(true);
       });
       setLocation('');
     }
@@ -51,6 +53,7 @@ function App() {
   const resetData = () => {
     setData({});
     setLocation('');
+    setSearchPerformed(false);
   };
 
   return (
@@ -65,33 +68,35 @@ function App() {
         <button className="reset-button" onClick={resetData}>Reset</button>
       </div>
       <div className="container">
-        <div className="cards">
-          {recommendedData.map((locationData, index) => (
-            <div className="card" key={index}>
-              <div className="location">{locationData.name}</div>
-              <div className="temp">{locationData.main.temp.toFixed()}°F</div>
-              <div className="description">{locationData.weather[0].main}</div>
-              <div className="details">
-                <div className="detail">Feels Like: {locationData.main.feels_like.toFixed()}°F</div>
-                <div className="detail">Humidity: {locationData.main.humidity}%</div>
-                <div className="detail">Wind Speed: {locationData.wind.speed.toFixed()} MPH</div>
+        {!searchPerformed && (
+          <div className="cards">
+            {recommendedData.map((locationData, index) => (
+              <div className="card" key={index}>
+                <div className="location">{locationData.name}</div>
+                <div className="temp">{locationData.main.temp.toFixed()}°F</div>
+                <div className="description">{locationData.weather[0].main}</div>
+                <div className="details">
+                  <div className="detail">Feels Like: {locationData.main.feels_like.toFixed()}°F</div>
+                  <div className="detail">Humidity: {locationData.main.humidity}%</div>
+                  <div className="detail">Wind Speed: {locationData.wind.speed.toFixed()} MPH</div>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-        {Object.keys(userLocationData).length !== 0 && (
-          <div className="card">
-            <div className="location">{userLocationData.name}</div>
-            <div className="temp">{userLocationData.main.temp.toFixed()}°F</div>
-            <div className="description">{userLocationData.weather[0].main}</div>
-            <div className="details">
-              <div className="detail">Feels Like: {userLocationData.main.feels_like.toFixed()}°F</div>
-              <div className="detail">Humidity: {userLocationData.main.humidity}%</div>
-              <div className="detail">Wind Speed: {userLocationData.wind.speed.toFixed()} MPH</div>
-            </div>
+            ))}
+            {Object.keys(userLocationData).length !== 0 && (
+              <div className="card user-location-card">
+                <div className="location">{userLocationData.name}</div>
+                <div className="temp">{userLocationData.main.temp.toFixed()}°F</div>
+                <div className="description">{userLocationData.weather[0].main}</div>
+                <div className="details">
+                  <div className="detail">Feels Like: {userLocationData.main.feels_like.toFixed()}°F</div>
+                  <div className="detail">Humidity: {userLocationData.main.humidity}%</div>
+                  <div className="detail">Wind Speed: {userLocationData.wind.speed.toFixed()} MPH</div>
+                </div>
+              </div>
+            )}
           </div>
         )}
-        {Object.keys(data).length !== 0 && (
+        {searchPerformed && Object.keys(data).length !== 0 && (
           <>
             <div className="top">
               <div className="location">
